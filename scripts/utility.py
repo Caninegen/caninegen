@@ -1252,14 +1252,9 @@ def generate_sprite(cat, life_state=None, scars_hidden=False, acc_hidden=False, 
                 tortie_pattern = "SingleColour"
             else:
                 tortie_pattern = cat.pelt.tortiepattern
-
-            patches = sprites.sprites[
-                tortie_pattern + f'{n}_' + cat.pelt.tortiecolour + cat_sprite].copy()
-            patches.blit(sprites.sprites["tortiemask" + f'{n}_' + cat.pelt.pattern + cat_sprite], (0, 0),
-                         special_flags=pygame.BLEND_RGBA_MULT)
-
+            if cat.pelt.name in ["Tortie", "Calico"]:
+                cat.pelt.name = "SingleColour"
             # Add patches onto cat.
-            new_sprite.blit(patches, (0, 0))
 
         # TINTS
         if cat.pelt.tint != "none" and cat.pelt.tint in sprites.cat_tints["tint_colours"]:

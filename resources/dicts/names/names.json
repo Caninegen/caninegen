@@ -1,10 +1,10 @@
 {
   "special_suffixes": {
-    "newborn": "kit",
-    "kitten": "kit",
-    "apprentice": "paw",
-    "medicine cat apprentice": "paw",
-    "mediator apprentice": "paw",
+    "newborn": "pup",
+    "kitten": "pup",
+    "apprentice": "pup",
+    "medicine cat apprentice": "pup",
+    "mediator apprentice": "pup",
     "leader": "star"
     },
   "normal_suffixes" : [

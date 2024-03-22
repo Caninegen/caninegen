@@ -12,19 +12,6 @@ class Pelt():
     sprites_names = {
         "SingleColour": 'single',
         'TwoColour': 'single',
-        'Tabby': 'tabby',
-        'Marbled': 'marbled',
-        'Rosette': 'rosette',
-        'Smoke': 'smoke',
-        'Ticked': 'ticked',
-        'Speckled': 'speckled',
-        'Bengal': 'bengal',
-        'Mackerel': 'mackerel',
-        'Classic': 'classic',
-        'Sokoke': 'sokoke',
-        'Agouti': 'agouti',
-        'Singlestripe': 'singlestripe',
-        'Masked': 'masked',
         'Tortie': None,
         'Calico': None,
     }
@@ -237,7 +224,8 @@ class Pelt():
             self.tortiepattern = sub("tortie", "", self.tortiepattern.lower())
             if self.tortiepattern == "solid":
                 self.tortiepattern = "single"
-                
+        if self.name in ['Tortie', 'Calico']:
+            self.name = 'SingleColour'
         if self.white_patches in convert_dict["old_creamy_patches"]:
             self.white_patches = convert_dict["old_creamy_patches"][self.white_patches]
             self.white_patches_tint = "darkcream"
@@ -689,7 +677,7 @@ class Pelt():
                     if self.tortiebase in ["single"]:
                         self.tortiepattern = ["single"]
                     else:
-                        self.tortiepattern = random.choices([self.tortiebase, 'single'], weights=[97, 3], k=1)[0]
+                        self.tortiepattern = ["single"]
 
                     if self.colour == "WHITE":
                         possible_colors = Pelt.white_colours.copy()
