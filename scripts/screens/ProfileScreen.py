@@ -672,7 +672,8 @@ class ProfileScreen(Screens):
             output += the_cat.age
         # NEWLINE ----------
         output += "\n"
-
+        output += 'species: ' + str(the_cat.pelt.species)
+        output += "\n"
         # EYE COLOR
         output += 'eyes: ' + str(the_cat.describe_eyes())
         # NEWLINE ----------
