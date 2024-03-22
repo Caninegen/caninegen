@@ -163,11 +163,7 @@ class Condition_Events():
         # handle if the current cat is already injured
         if cat.is_injured() and game.clan.game_mode != 'classic':
             for injury in cat.injuries:
-                if injury == "pregnant" and cat.ID not in game.clan.pregnancy_data:
-                    print(f"INFO: deleted pregnancy condition of {cat.ID} due no pregnancy data in the clan.")
-                    del cat.injuries[injury]
-                    return triggered
-                elif injury == 'pregnant':
+                if injury == 'pregnant':
                     return triggered
             triggered, event_string = Condition_Events.handle_already_injured(cat)
             text = event_string
@@ -388,7 +384,7 @@ class Condition_Events():
         scarless_conditions = [
             "weak leg", "paralyzed", "raspy lungs", "wasting disease", "blind", "failing eyesight", "one bad eye",
             "partial hearing loss", "deaf", "constant joint pain", "constantly dizzy", "recurring shock",
-            "lasting grief", "persistent headaches"
+            "lasting grief"
         ]
 
         got_condition = False
@@ -413,8 +409,6 @@ class Condition_Events():
                 except KeyError:
                     print(f"WARNING: {injury_name} couldn't be found in injury dict! no permanent condition was given")
                     return perm_condition
-            else:
-                print(f"WARNING: {scar} for {injury_name} is either None or is not in scar_to_condition dict.")
 
         elif condition is not None:
             perm_condition = condition

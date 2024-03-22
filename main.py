@@ -42,10 +42,18 @@ if not getattr(sys, 'frozen', False):
             break
 
     if isMissing:
-        print("""You are missing some requirements to run clangen!
-                
-                Please look at the "README.md" file for instructions on how to install them.
-                """)
+        if find_spec("thonny") is not None:
+            print("""You are missing some requirements to run clangen!
+                  Please press "Tools" -> "Manage Packages"
+                  Once the menu opens, click the link below "Install from requirements file".
+                  Then, select the file "requirements.txt" in the clangen folder.
+                  """)
+        else:
+            print("""You are missing some requirements to run clangen!
+                  Please run the following command in your terminal to install them:
+                  
+                  python3 -m pip install -r requirements.txt
+                  """)
         
         print("If you are still having issues, please ask for help in the clangen discord server: https://discord.gg/clangen")
         sys.exit(1)
@@ -133,14 +141,11 @@ if os.environ.get('CODESPACES'):
 
 if get_version_info().is_source_build:
     print("Running on source code")
-    if get_version_info().version_number == VERSION_NAME:
-        print("Failed to get git commit hash, using hardcoded version number instead.")
-        print("Hey testers! We recommend you use git to clone the repository, as it makes things easier for everyone.")  # pylint: disable=line-too-long
-        print("There are instructions at https://discord.com/channels/1003759225522110524/1054942461178421289/1078170877117616169")  # pylint: disable=line-too-long
+
 else:
     print("Running on PyInstaller build")
 
-print("Version Name: ", VERSION_NAME)
+print("ClanGen Version Name: ", VERSION_NAME)
 print("Running on commit " + get_version_info().version_number)
 
 # Load game
@@ -151,10 +156,26 @@ from scripts.game_structure.discord_rpc import _DiscordRPC
 from scripts.cat.sprites import sprites
 from scripts.clan import clan_class
 from scripts.utility import get_text_box_theme, quit, scale  # pylint: disable=redefined-builtin
-from scripts.debug_menu import debugmode
+from scripts.debugMenu import debugmode
 import pygame_gui
 import pygame
 
+print("")
+print("Running on SPS Framework")
+print("    Version: " + get_version_info().sps_version)
+print("    Species detected: " + str(len(game.species["species"])))
+print("    Sprite folders detected: " + str(len(game.sprite_folders)))
+if len(game.species["ran_weights"]) == len(game.species["species"]):
+    print("    ran_weights amount: correct")
+else:
+    print("    ran_weights amount: incorrect")
+if len(game.species["in_weights"]) == len(game.species["species"]):
+    print("    in_weights amount: correct")
+else:
+    print("    in_weights amount: incorrect")
+print("Created by a.corn(afellowcorn)")
+print("Official documentation: https://docs.google.com/document/d/1ZwXM-e1TEsUr7tzTtXxek-AKO8e3gGARRiW6JeevShc")
+print("")
 
 
 

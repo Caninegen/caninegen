@@ -47,7 +47,6 @@ class Game():
     # Keeping track of various last screen for various purposes
     last_screen_forupdate = 'start screen'
     last_screen_forProfile = 'list screen'
-    last_list_forProfile = None
 
     # down = pygame.image.load("resources/images/buttons/arrow_down.png").convert_alpha()
     # up = pygame.image.load("resources/images/buttons/arrow_up.png").convert_alpha()
@@ -179,6 +178,9 @@ class Game():
     config = {}
     prey_config = {}
 
+    species_list = {}
+    sprite_folders = set()
+
     rpc = None
 
     is_close_menu_open = False
@@ -198,6 +200,14 @@ class Game():
         if self.config['fun']['april_fools']:
             self.config['fun']['newborns_can_roam'] = True
             self.config['fun']['newborns_can_patrol'] = True
+
+        with open(f"resources/species.json", 'r') as read_file:
+            self.species = ujson.loads(read_file.read())
+
+        # count amount of folders excluding faded and dicts folder
+        for x in(next(os.walk('sprites'))[1]):
+            if not x in ['faded', 'dicts']:
+                self.sprite_folders.add(x)
 
     def update_game(self):
         if self.current_screen != self.switches['cur_screen']:

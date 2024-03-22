@@ -11,7 +11,7 @@ from scripts.cat.names import names
 from re import sub
 from scripts.game_structure import image_cache
 from scripts.game_structure.image_button import UIImageButton, UISpriteButton
-from scripts.game_structure.game_essentials import game, screen, screen_x, screen_y, MANAGER
+from scripts.game_structure.game_essentials import game, MANAGER
 from scripts.patrol.patrol import Patrol
 
 
@@ -39,10 +39,10 @@ class MakeClanScreen(Screens):
 
     expanded_mode_text = "A more hands-on experience. " \
                          "This mode has everything in Classic Mode as well as more management-focused features.<br><br>" \
-                         "Additional include:<br>" \
+                         "New features include:<br>" \
                          "- Illnesses, Injuries, and Permanent Conditions<br>" \
                          "- Herb gathering and treatment<br>" \
-                         "- Fresh-kill pile and nutrition system<br><br>" \
+                         "- Ability to choose patrol type<br><br>" \
                          "With this mode you'll be making the important Clan-life decisions."
 
     cruel_mode_text = "This mode has all the features of Expanded mode, but is significantly more difficult. If " \
@@ -147,7 +147,7 @@ class MakeClanScreen(Screens):
             self.game_mode = 'expanded'
             self.refresh_text_and_buttons()
         elif event.ui_element == self.elements['cruel_mode_button']:
-            self.game_mode = 'cruel season'
+            self.game_mode = 'cruel'
             self.refresh_text_and_buttons()
         # When the next_step button is pressed, go to the Clan naming page.
         elif event.ui_element == self.elements['next_step']:
@@ -161,10 +161,10 @@ class MakeClanScreen(Screens):
             if self.game_mode == 'classic':
                 self.game_mode = 'expanded'
             elif self.game_mode == 'expanded':
-                self.game_mode = 'cruel season'
+                self.game_mode = 'cruel'
             self.refresh_text_and_buttons()
         elif event.key == pygame.K_UP:
-            if self.game_mode == 'cruel season':
+            if self.game_mode == 'cruel':
                 self.game_mode = 'expanded'
             elif self.game_mode == 'expanded':
                 self.game_mode = 'classic'
@@ -461,12 +461,10 @@ class MakeClanScreen(Screens):
                 self.elements["error"].set_text("A Clan with that name already exists.")
                 self.elements["error"].show()
                 self.elements['next_step'].disable()
+                return
             else:
                 self.elements["error"].hide()
                 self.elements['next_step'].enable()
-            
-            # Set the background for the name clan page - done here to avoid GUI layering issues
-            screen.blit(pygame.transform.scale(MakeClanScreen.name_clan_img, (screen_x, screen_y)), (0,0))
 
     def clear_all_page(self):
         """Clears the entire page, including layout images"""
@@ -486,7 +484,7 @@ class MakeClanScreen(Screens):
             elif self.game_mode == 'expanded':
                 display_text = self.expanded_mode_text
                 display_name = "Expanded Mode"
-            elif self.game_mode == 'cruel season':
+            elif self.game_mode == 'cruel':
                 display_text = self.cruel_mode_text
                 display_name = "Cruel Season"
             else:
@@ -506,7 +504,7 @@ class MakeClanScreen(Screens):
                 self.elements['classic_mode_button'].enable()
                 self.elements['expanded_mode_button'].disable()
                 self.elements['cruel_mode_button'].enable()
-            elif self.game_mode == 'cruel season':
+            elif self.game_mode == 'cruel':
                 self.elements['classic_mode_button'].enable()
                 self.elements['expanded_mode_button'].enable()
                 self.elements['cruel_mode_button'].disable()
@@ -516,7 +514,7 @@ class MakeClanScreen(Screens):
                 self.elements['cruel_mode_button'].enable()
 
             # Don't let the player go forwards with cruel mode, it's not done yet.
-            if self.game_mode == 'cruel season':
+            if self.game_mode == 'cruel':
                 self.elements['next_step'].disable()
             else:
                 self.elements['next_step'].enable()
@@ -721,9 +719,10 @@ class MakeClanScreen(Screens):
                 self.elements['cat_name'].set_text(str(selected.name))
             self.elements['cat_name'].show()
             self.elements['cat_info'].set_text(selected.gender + "\n" +
+                                               str(selected.species + "\n" +
                                                str(selected.age + "\n" +
                                                    str(selected.personality.trait) + "\n" +
-                                                   str(selected.skills.skill_string())))
+                                                   str(selected.skills.skill_string()))))
             self.elements['cat_info'].show()
         else:
             self.elements['next_step'].disable()
@@ -835,6 +834,11 @@ class MakeClanScreen(Screens):
         self.sub_screen = 'name clan'
 
         # Create all the elements.
+        self.elements["background"] = pygame_gui.elements.UIImage(scale(pygame.Rect((0, 0), (1600, 1400))),
+                                                                  pygame.transform.scale(MakeClanScreen.name_clan_img,
+                                                                                         (1600, 1400))
+                                                                  , manager=MANAGER)
+        self.elements['background'].disable()
         self.elements["random"] = UIImageButton(scale(pygame.Rect((448, 1190), (68, 68))), "",
                                                 object_id="#random_dice_button"
                                                 , manager=MANAGER)
@@ -921,7 +925,7 @@ class MakeClanScreen(Screens):
             self.elements['roll3'].hide()
 
         # info for chosen cats:
-        self.elements['cat_info'] = pygame_gui.elements.UITextBox("", scale(pygame.Rect((880, 500), (230, 250))),
+        self.elements['cat_info'] = pygame_gui.elements.UITextBox("", scale(pygame.Rect((880, 475), (230, 250))),
                                                                   visible=False,
                                                                   object_id=get_text_box_theme(
                                                                       "#text_box_22_horizleft_spacing_95"),
@@ -965,7 +969,7 @@ class MakeClanScreen(Screens):
         self.clan_name_header()
 
         # info for chosen cats:
-        self.elements['cat_info'] = pygame_gui.elements.UITextBox("", scale(pygame.Rect((880, 520), (230, 250))),
+        self.elements['cat_info'] = pygame_gui.elements.UITextBox("", scale(pygame.Rect((880, 475), (230, 250))),
                                                                   visible=False,
                                                                   object_id=get_text_box_theme(
                                                                       "#text_box_22_horizleft_spacing_95"),
@@ -1009,7 +1013,7 @@ class MakeClanScreen(Screens):
 
         # info for chosen cats:
         self.elements['cat_info'] = pygame_gui.elements.UITextBox("",
-                                                                  scale(pygame.Rect((880, 520), (230, 250))),
+                                                                  scale(pygame.Rect((880, 475), (230, 250))),
                                                                   visible=False,
                                                                   object_id=get_text_box_theme(
                                                                       "#text_box_22_horizleft_spacing_95"),
@@ -1059,7 +1063,7 @@ class MakeClanScreen(Screens):
 
         # info for chosen cats:
         self.elements['cat_info'] = pygame_gui.elements.UITextBox("",
-                                                                  scale(pygame.Rect((880, 520), (230, 250))),
+                                                                  scale(pygame.Rect((880, 475), (230, 250))),
                                                                   visible=False,
                                                                   object_id=get_text_box_theme(
                                                                       "#text_box_22_horizleft_spacing_95"),

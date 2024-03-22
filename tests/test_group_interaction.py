@@ -25,7 +25,7 @@ class MainCatFiltering(unittest.TestCase):
         
         # when
         all_interactions = [interaction1, interaction2]
-        filtered_interactions = group_events.get_main_cat_interactions(all_interactions, "Any", "Any", {"m_c": main_cat.ID})
+        filtered_interactions = group_events.get_main_cat_interactions(all_interactions, "Any", "Any")
 
         # then
         self.assertNotEqual(len(filtered_interactions), len(all_interactions))
@@ -46,7 +46,7 @@ class MainCatFiltering(unittest.TestCase):
         
         # when
         all_interactions = [interaction1, interaction2]
-        filtered_interactions = group_events.get_main_cat_interactions(all_interactions, "Any", "Any", {"m_c": main_cat.ID})
+        filtered_interactions = group_events.get_main_cat_interactions(all_interactions, "Any", "Any")
 
         # then
         self.assertEqual(len(filtered_interactions), len(all_interactions))
@@ -68,7 +68,7 @@ class MainCatFiltering(unittest.TestCase):
         
         # when
         all_interactions = [interaction1, interaction2]
-        filtered_interactions = group_events.get_main_cat_interactions(all_interactions, "Any", "Any", {"m_c": main_cat.ID})
+        filtered_interactions = group_events.get_main_cat_interactions(all_interactions, "Any", "Any")
 
         # then
         self.assertNotEqual(len(filtered_interactions), len(all_interactions))
@@ -89,7 +89,7 @@ class MainCatFiltering(unittest.TestCase):
         
         # when
         all_interactions = [interaction1, interaction2]
-        filtered_interactions = group_events.get_main_cat_interactions(all_interactions, "Any", "Any", {"m_c": main_cat.ID})
+        filtered_interactions = group_events.get_main_cat_interactions(all_interactions, "Any", "Any")
 
         # then
         self.assertEqual(len(filtered_interactions), len(all_interactions))
@@ -104,14 +104,14 @@ class MainCatFiltering(unittest.TestCase):
         group_events.abbreviations_cat_id={"m_c": main_cat.ID}
 
         interaction1 = Group_Interaction("1")
-        interaction1.skill_constraint = {"m_c": ["HUNTER,1"]}
+        interaction1.skill_constraint = {"m_c": ["good hunter"]}
 
         interaction2 = Group_Interaction("2")
-        interaction2.skill_constraint = {"m_c": ["HUNTER,2"]}
+        interaction2.skill_constraint = {"m_c": ["excellent hunter"]}
         
         # when
         all_interactions = [interaction1, interaction2]
-        filtered_interactions = group_events.get_main_cat_interactions(all_interactions, "Any", "Any", {"m_c": main_cat.ID})
+        filtered_interactions = group_events.get_main_cat_interactions(all_interactions, "Any", "Any")
 
         # then
         self.assertNotEqual(len(filtered_interactions), len(all_interactions))
@@ -125,14 +125,14 @@ class MainCatFiltering(unittest.TestCase):
         group_events.abbreviations_cat_id={"m_c": main_cat.ID}
 
         interaction1 = Group_Interaction("1")
-        interaction1.skill_constraint = {"m_c": ["HUNTER,1"]}
+        interaction1.skill_constraint = {"m_c": ["good hunter"]}
 
         interaction2 = Group_Interaction("2")
-        interaction2.skill_constraint = {"m_c": ["HUNTER,2", "HUNTER,1"]}
+        interaction2.skill_constraint = {"m_c": ["excellent hunter", "good hunter"]}
         
         # when
         all_interactions = [interaction1, interaction2]
-        filtered_interactions = group_events.get_main_cat_interactions(all_interactions, "Any", "Any", {"m_c": main_cat.ID})
+        filtered_interactions = group_events.get_main_cat_interactions(all_interactions, "Any", "Any")
 
         # then
         self.assertEqual(len(filtered_interactions), len(all_interactions))
@@ -154,7 +154,7 @@ class MainCatFiltering(unittest.TestCase):
         
         # when
         all_interactions = [interaction1, interaction2]
-        filtered_interactions = group_events.get_main_cat_interactions(all_interactions, "Any", "Any", {"m_c": main_cat.ID})
+        filtered_interactions = group_events.get_main_cat_interactions(all_interactions, "Any", "Any")
 
         # then
         self.assertNotEqual(len(filtered_interactions), len(all_interactions))
@@ -175,7 +175,7 @@ class MainCatFiltering(unittest.TestCase):
         
         # when
         all_interactions = [interaction1, interaction2]
-        filtered_interactions = group_events.get_main_cat_interactions(all_interactions, "Any", "Any", {"m_c": main_cat.ID})
+        filtered_interactions = group_events.get_main_cat_interactions(all_interactions, "Any", "Any")
 
         # then
         self.assertEqual(len(filtered_interactions), len(all_interactions))
@@ -186,8 +186,9 @@ class MainCatFiltering(unittest.TestCase):
 class OtherFiltering(unittest.TestCase):
     def test_season_one(self):
         # given
+        group_events = Group_Events()
         main_cat = Cat()
-        abbreviations_cat_id={"m_c": main_cat.ID}
+        group_events.abbreviations_cat_id={"m_c": main_cat.ID}
 
         interaction1 = Group_Interaction("1")
         interaction1.season = ["newleaf"]
@@ -197,7 +198,7 @@ class OtherFiltering(unittest.TestCase):
         
         # when
         all_interactions = [interaction1, interaction2]
-        filtered_interactions = Group_Events().get_main_cat_interactions(all_interactions, "Any", "newleaf", abbreviations_cat_id)
+        filtered_interactions = group_events.get_main_cat_interactions(all_interactions, "Any", "newleaf")
 
         # then
         self.assertNotEqual(len(filtered_interactions), len(all_interactions))
@@ -205,8 +206,9 @@ class OtherFiltering(unittest.TestCase):
 
     def test_season_multiple(self):
         # given
+        group_events = Group_Events()
         main_cat = Cat()
-        abbreviations_cat_id={"m_c": main_cat.ID}
+        group_events.abbreviations_cat_id={"m_c": main_cat.ID}
 
         interaction1 = Group_Interaction("1")
         interaction1.season = ["newleaf"]
@@ -216,7 +218,7 @@ class OtherFiltering(unittest.TestCase):
         
         # when
         all_interactions = [interaction1, interaction2]
-        filtered_interactions = Group_Events().get_main_cat_interactions(all_interactions, "Any", "newleaf", abbreviations_cat_id)
+        filtered_interactions = group_events.get_main_cat_interactions(all_interactions, "Any", "newleaf")
 
         # then
         self.assertEqual(len(filtered_interactions), len(all_interactions))
@@ -225,8 +227,9 @@ class OtherFiltering(unittest.TestCase):
 
     def test_season_any(self):
         # given
+        group_events = Group_Events()
         main_cat = Cat()
-        abbreviations_cat_id={"m_c": main_cat.ID}
+        group_events.abbreviations_cat_id={"m_c": main_cat.ID}
 
         interaction1 = Group_Interaction("1")
         interaction1.season = ["newleaf"]
@@ -236,7 +239,7 @@ class OtherFiltering(unittest.TestCase):
         
         # when
         all_interactions = [interaction1, interaction2]
-        filtered_interactions = Group_Events().get_main_cat_interactions(all_interactions, "Any", "newleaf", abbreviations_cat_id)
+        filtered_interactions = group_events.get_main_cat_interactions(all_interactions, "Any", "newleaf")
 
         # then
         self.assertEqual(len(filtered_interactions), len(all_interactions))
@@ -245,8 +248,9 @@ class OtherFiltering(unittest.TestCase):
 
     def test_biome_one(self):
         # given
+        group_events = Group_Events()
         main_cat = Cat()
-        abbreviations_cat_id={"m_c": main_cat.ID}
+        group_events.abbreviations_cat_id={"m_c": main_cat.ID}
 
         interaction1 = Group_Interaction("1")
         interaction1.biome = ["forest"]
@@ -256,7 +260,7 @@ class OtherFiltering(unittest.TestCase):
         
         # when
         all_interactions = [interaction1, interaction2]
-        filtered_interactions = Group_Events().get_main_cat_interactions(all_interactions, "forest", "Any", abbreviations_cat_id)
+        filtered_interactions = group_events.get_main_cat_interactions(all_interactions, "forest", "Any")
 
         # then
         self.assertNotEqual(len(filtered_interactions), len(all_interactions))
@@ -264,8 +268,9 @@ class OtherFiltering(unittest.TestCase):
 
     def test_biome_multiple(self):
         # given
+        group_events = Group_Events()
         main_cat = Cat()
-        abbreviations_cat_id={"m_c": main_cat.ID}
+        group_events.abbreviations_cat_id={"m_c": main_cat.ID}
 
         interaction1 = Group_Interaction("1")
         interaction1.biome = ["forest"]
@@ -275,7 +280,7 @@ class OtherFiltering(unittest.TestCase):
         
         # when
         all_interactions = [interaction1, interaction2]
-        filtered_interactions = Group_Events().get_main_cat_interactions(all_interactions, "forest", "Any", abbreviations_cat_id)
+        filtered_interactions = group_events.get_main_cat_interactions(all_interactions, "forest", "Any")
 
         # then
         self.assertEqual(len(filtered_interactions), len(all_interactions))
@@ -284,8 +289,9 @@ class OtherFiltering(unittest.TestCase):
 
     def test_biome_any(self):
         # given
+        group_events = Group_Events()
         main_cat = Cat()
-        abbreviations_cat_id={"m_c": main_cat.ID}
+        group_events.abbreviations_cat_id={"m_c": main_cat.ID}
 
         interaction1 = Group_Interaction("1")
         interaction1.biome = ["forest"]
@@ -295,7 +301,7 @@ class OtherFiltering(unittest.TestCase):
         
         # when
         all_interactions = [interaction1, interaction2]
-        filtered_interactions = Group_Events().get_main_cat_interactions(all_interactions, "forest", "Any", abbreviations_cat_id)
+        filtered_interactions = group_events.get_main_cat_interactions(all_interactions, "forest", "Any")
 
         # then
         self.assertEqual(len(filtered_interactions), len(all_interactions))
@@ -306,8 +312,14 @@ class OtherFiltering(unittest.TestCase):
 class Abbreviations(unittest.TestCase):
     def test_get_abbreviation_possibilities_all(self):
         # given
+        group_events = Group_Events()
         main_cat = Cat()
         main_cat.status = "warrior"
+        group_events.abbreviations_cat_id={
+            "m_c": main_cat.ID,
+            "r_c1": None,
+            "r_c2": None
+        }
 
         random1 = Cat()
         random1.status = "warrior"
@@ -325,7 +337,7 @@ class Abbreviations(unittest.TestCase):
         # when
         all_interactions = [interaction1, interaction2]
         interaction_cats = [random1, random2]
-        abbreviations_possibilities, cat_abbreviations_counter = Group_Events().get_abbreviations_possibilities(
+        abbreviations_possibilities = group_events.get_abbreviations_possibilities(
             all_interactions, 3, interaction_cats
         )
 
@@ -337,8 +349,14 @@ class Abbreviations(unittest.TestCase):
 
     def test_get_abbreviation_possibilities_not_all(self):
         # given
+        group_events = Group_Events()
         main_cat = Cat()
         main_cat.status = "warrior"
+        group_events.abbreviations_cat_id={
+            "m_c": main_cat.ID,
+            "r_c1": None,
+            "r_c2": None
+        }
 
         random1 = Cat()
         random1.status = "warrior"
@@ -356,7 +374,7 @@ class Abbreviations(unittest.TestCase):
         # when
         all_interactions = [interaction1, interaction2]
         interaction_cats = [random1, random2, random3]
-        abbreviations_possibilities, cat_abbreviations_counter = Group_Events().get_abbreviations_possibilities(
+        abbreviations_possibilities = group_events.get_abbreviations_possibilities(
             all_interactions, 3, interaction_cats
         )
 
@@ -368,6 +386,7 @@ class Abbreviations(unittest.TestCase):
 
     def test_remove_abbreviations_missing_cats(self):
         # given
+        group_events = Group_Events()
         abbreviations_possibilities = {
             "1": {
                 "r_c1": ["1", "2"],
@@ -380,7 +399,7 @@ class Abbreviations(unittest.TestCase):
         }
         
         # when
-        new_possibilities = Group_Events().remove_abbreviations_missing_cats(
+        new_possibilities = group_events.remove_abbreviations_missing_cats(
             abbreviations_possibilities
         )
 
@@ -391,9 +410,10 @@ class Abbreviations(unittest.TestCase):
 
     def test_set_abbreviations_cats(self):
         # given
+        group_events = Group_Events()
         main_cat = Cat()
         main_cat.status = "warrior"
-        abbreviations_cat_id={
+        group_events.abbreviations_cat_id={
             "m_c": main_cat.ID,
             "r_c1": None,
             "r_c2": None
@@ -404,11 +424,17 @@ class Abbreviations(unittest.TestCase):
         random2 = Cat()
         random2.status = "warrior"
         random3 = Cat()
-        random3.status = "medicine cat"
+        random3.status = "healer"
+
+        interaction1 = Group_Interaction("1")
+        interaction1.status_constraint = {"r_c1": ["warrior"]}
+
+        interaction2 = Group_Interaction("2")
+        interaction2.status_constraint = {"r_c1": ["healer", "warrior"]}
 
         # when
         interaction_cats = [random1, random2, random3]
-        cat_abbreviations_counter = {
+        group_events.cat_abbreviations_counter = {
             random1.ID: {
                 "r_c1": 2,
                 "r_c2": 2
@@ -422,18 +448,19 @@ class Abbreviations(unittest.TestCase):
                 "r_c2": 2
             }
         }
-        abbreviations_cat_id = Group_Events().set_abbreviations_cats(interaction_cats, abbreviations_cat_id, cat_abbreviations_counter)
+        group_events.set_abbreviations_cats(interaction_cats)
 
         # then
-        self.assertIsNotNone(abbreviations_cat_id["r_c1"])
-        self.assertIsNotNone(abbreviations_cat_id["r_c2"])
-        self.assertIn(abbreviations_cat_id["r_c1"], [random1.ID, random2.ID])
-        self.assertNotIn(abbreviations_cat_id["r_c1"], [random3.ID])
+        self.assertIsNotNone(group_events.abbreviations_cat_id["r_c1"])
+        self.assertIsNotNone(group_events.abbreviations_cat_id["r_c2"])
+        self.assertIn(group_events.abbreviations_cat_id["r_c1"], [random1.ID, random2.ID])
+        self.assertNotIn(group_events.abbreviations_cat_id["r_c1"], [random3.ID])
 
 
 class OtherCatsFiltering(unittest.TestCase):
     def test_relationship_allow_true(self):
         # given
+        group_events = Group_Events()
         parent = Cat()
         main_cat = Cat(parent1=parent.ID)
         main_cat.status = "warrior"
@@ -441,7 +468,7 @@ class OtherCatsFiltering(unittest.TestCase):
         random1.status = "warrior"
         random2 = Cat()
         random2.status = "warrior"
-        abbreviations_cat_id={
+        group_events.abbreviations_cat_id={
             "m_c": main_cat.ID,
             "r_c1": random1.ID,
             "r_c2": random2.ID
@@ -530,19 +557,20 @@ class OtherCatsFiltering(unittest.TestCase):
         }
 
         # then
-        self.assertTrue(Group_Events().relationship_allow_interaction(interaction1, abbreviations_cat_id))
-        self.assertTrue(Group_Events().relationship_allow_interaction(interaction2, abbreviations_cat_id))
-        self.assertTrue(Group_Events().relationship_allow_interaction(interaction3, abbreviations_cat_id))
-        self.assertTrue(Group_Events().relationship_allow_interaction(interaction4, abbreviations_cat_id))
-        self.assertTrue(Group_Events().relationship_allow_interaction(interaction5, abbreviations_cat_id))
-        self.assertTrue(Group_Events().relationship_allow_interaction(interaction6, abbreviations_cat_id))
-        self.assertTrue(Group_Events().relationship_allow_interaction(interaction7, abbreviations_cat_id))
-        self.assertTrue(Group_Events().relationship_allow_interaction(interaction8, abbreviations_cat_id))
-        self.assertTrue(Group_Events().relationship_allow_interaction(interaction9, abbreviations_cat_id))
-        self.assertTrue(Group_Events().relationship_allow_interaction(interaction10, abbreviations_cat_id))
+        self.assertTrue(group_events.relationship_allow_interaction(interaction1))
+        self.assertTrue(group_events.relationship_allow_interaction(interaction2))
+        self.assertTrue(group_events.relationship_allow_interaction(interaction3))
+        self.assertTrue(group_events.relationship_allow_interaction(interaction4))
+        self.assertTrue(group_events.relationship_allow_interaction(interaction5))
+        self.assertTrue(group_events.relationship_allow_interaction(interaction6))
+        self.assertTrue(group_events.relationship_allow_interaction(interaction7))
+        self.assertTrue(group_events.relationship_allow_interaction(interaction8))
+        self.assertTrue(group_events.relationship_allow_interaction(interaction9))
+        self.assertTrue(group_events.relationship_allow_interaction(interaction10))
 
     def test_relationship_allow_false(self):
         # given
+        group_events = Group_Events()
         parent = Cat()
         main_cat = Cat(parent1=parent.ID)
         main_cat.status = "warrior"
@@ -550,7 +578,7 @@ class OtherCatsFiltering(unittest.TestCase):
         random1.status = "warrior"
         random2 = Cat()
         random2.status = "warrior"
-        abbreviations_cat_id={
+        group_events.abbreviations_cat_id={
             "m_c": main_cat.ID,
             "r_c1": random1.ID,
             "r_c2": random2.ID
@@ -640,13 +668,13 @@ class OtherCatsFiltering(unittest.TestCase):
         }
 
         # then
-        self.assertFalse(Group_Events().relationship_allow_interaction(interaction1, abbreviations_cat_id))
-        self.assertFalse(Group_Events().relationship_allow_interaction(interaction2, abbreviations_cat_id))
-        self.assertFalse(Group_Events().relationship_allow_interaction(interaction3, abbreviations_cat_id))
-        self.assertFalse(Group_Events().relationship_allow_interaction(interaction4, abbreviations_cat_id))
-        self.assertFalse(Group_Events().relationship_allow_interaction(interaction5, abbreviations_cat_id))
-        self.assertFalse(Group_Events().relationship_allow_interaction(interaction6, abbreviations_cat_id))
-        self.assertFalse(Group_Events().relationship_allow_interaction(interaction7, abbreviations_cat_id))
-        self.assertFalse(Group_Events().relationship_allow_interaction(interaction8, abbreviations_cat_id))
-        self.assertFalse(Group_Events().relationship_allow_interaction(interaction9, abbreviations_cat_id))
-        self.assertFalse(Group_Events().relationship_allow_interaction(interaction10, abbreviations_cat_id))
+        self.assertFalse(group_events.relationship_allow_interaction(interaction1))
+        self.assertFalse(group_events.relationship_allow_interaction(interaction2))
+        self.assertFalse(group_events.relationship_allow_interaction(interaction3))
+        self.assertFalse(group_events.relationship_allow_interaction(interaction4))
+        self.assertFalse(group_events.relationship_allow_interaction(interaction5))
+        self.assertFalse(group_events.relationship_allow_interaction(interaction6))
+        self.assertFalse(group_events.relationship_allow_interaction(interaction7))
+        self.assertFalse(group_events.relationship_allow_interaction(interaction8))
+        self.assertFalse(group_events.relationship_allow_interaction(interaction9))
+        self.assertFalse(group_events.relationship_allow_interaction(interaction10))

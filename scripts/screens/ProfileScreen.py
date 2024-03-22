@@ -554,7 +554,7 @@ class ProfileScreen(Screens):
         self.profile_elements["favourite_button"] = UIImageButton(scale(pygame.Rect
                                                                         ((x_pos, 287), (56, 56))),
                                                                   "",
-                                                                  object_id="#fav_star",
+                                                                  object_id="#fav_cat",
                                                                   manager=MANAGER,
                                                                   tool_tip_text='Remove favorite status',
                                                                   starting_height=2)
@@ -563,7 +563,7 @@ class ProfileScreen(Screens):
                                                                             ((x_pos, 287),
                                                                              (56, 56))),
                                                                       "",
-                                                                      object_id="#not_fav_star",
+                                                                      object_id="#not_fav_cat",
                                                                       manager=MANAGER,
                                                                       tool_tip_text='Mark as favorite',
                                                                       starting_height=2)
@@ -625,10 +625,7 @@ class ProfileScreen(Screens):
         if is_instructor:
             current_cat_found = 1
 
-        if len(Cat.ordered_cat_list) == 0:
-            Cat.ordered_cat_list = Cat.all_cats_list
-
-        for check_cat in Cat.ordered_cat_list:
+        for check_cat in Cat.all_cats_list:
             if check_cat.ID == self.the_cat.ID:
                 current_cat_found = 1
             else:
@@ -663,6 +660,11 @@ class ProfileScreen(Screens):
         # NEWLINE ----------
         output += "\n"
 
+        # SPECIES
+        output += str(the_cat.species)
+        # NEWLINE ----------
+        output += "\n"
+
         # AGE
         if the_cat.age == 'kitten':
             output += 'young'
@@ -672,8 +674,7 @@ class ProfileScreen(Screens):
             output += the_cat.age
         # NEWLINE ----------
         output += "\n"
-        output += 'species: ' + str(the_cat.pelt.species)
-        output += "\n"
+
         # EYE COLOR
         output += 'eyes: ' + str(the_cat.describe_eyes())
         # NEWLINE ----------
@@ -876,18 +877,13 @@ class ProfileScreen(Screens):
 
         # NUTRITION INFO (if the game is in the correct mode)
         if game.clan.game_mode in ["expanded", "cruel season"] and the_cat.is_alive() and FRESHKILL_ACTIVE:
-            # Check to only show nutrition for clan cats
-            if str(the_cat.status) not in ["loner", "kittypet", "rogue", "former Clancat", "exiled"]:
-                nutr = None
-                if the_cat.ID in game.clan.freshkill_pile.nutrition_info:
-                    nutr = game.clan.freshkill_pile.nutrition_info[the_cat.ID]
-                if not nutr:
-                    game.clan.freshkill_pile.add_cat_to_nutrition(the_cat)
-                    nutr = game.clan.freshkill_pile.nutrition_info[the_cat.ID]
-                output += "nutrition: " + nutr.nutrition_text 
-                if game.clan.clan_settings['showxp']:
-                    output += ' (' + str(int(nutr.percentage)) + ')'
-                output += "\n"
+            nutr = None
+            if the_cat.ID in game.clan.freshkill_pile.nutrition_info:
+                nutr = game.clan.freshkill_pile.nutrition_info[the_cat.ID]
+            if nutr:
+                output += f"nutrition status: {round(nutr.percentage, 1)}%\n"
+            else:
+                output += f"nutrition status: 100%\n"
 
         if the_cat.is_disabled():
             for condition in the_cat.permanent_condition:

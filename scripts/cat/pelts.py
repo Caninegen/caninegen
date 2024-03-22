@@ -63,11 +63,10 @@ class Pelt():
     # bite scars by @wood pank on discord
     scars1 = ["ONE", "TWO", "THREE", "TAILSCAR", "SNOUT", "CHEEK", "SIDE", "THROAT", "TAILBASE", "BELLY",
             "LEGBITE", "NECKBITE", "FACE", "MANLEG", "BRIGHTHEART", "MANTAIL", "BRIDGE", "RIGHTBLIND", "LEFTBLIND",
-            "BOTHBLIND", "BEAKCHEEK", "BEAKLOWER", "CATBITE", "RATBITE", "QUILLCHUNK", "QUILLSCRATCH", "HINDLEG",
-            "BACK", "QUILLSIDE", "SCRATCHSIDE", "BEAKSIDE", "CATBITETWO", "FOUR"]
+            "BOTHBLIND", "BEAKCHEEK", "BEAKLOWER", "CATBITE", "RATBITE", "QUILLCHUNK", "QUILLSCRATCH"]
     scars2 = ["LEFTEAR", "RIGHTEAR", "NOTAIL", "HALFTAIL", "NOPAW", "NOLEFTEAR", "NORIGHTEAR", "NOEAR"]
     scars3 = ["SNAKE", "TOETRAP", "BURNPAWS", "BURNTAIL", "BURNBELLY", "BURNRUMP", "FROSTFACE", "FROSTTAIL", "FROSTMITT",
-            "FROSTSOCK", "TOE", "SNAKETWO"]
+            "FROSTSOCK"]
 
     # make sure to add plural and singular forms of new accs to acc_display.json so that they will display nicely
     plant_accessories = ["MAPLE LEAF", "HOLLY", "BLUE BERRIES", "FORGET ME NOTS", "RYE STALK", "LAUREL",
@@ -133,12 +132,10 @@ class Pelt():
 
     skin_sprites = ['BLACK',  'PINK', 'DARKBROWN', 'BROWN', 'LIGHTBROWN', 'DARK', 'DARKGREY', 'GREY', 'DARKSALMON',
                     'SALMON', 'PEACH', 'DARKMARBLED', 'MARBLED', 'LIGHTMARBLED', 'DARKBLUE', 'BLUE', 'LIGHTBLUE', 'RED']
-    species_options = ['husky','australian shepherd', 'german shepherd', 'great dane', 'beagle', 'pitbull', 'dalmation', 'cocker spaniel', 'golden retriever', 'labrador',
-                       'rottweiler', 'shiba inu', 'mastiff', 'rat terrier', 'chihuahua']
+
     """Holds all appearence information for a cat. """
     def __init__(self,
                  name:str="SingleColour",
-                 species:str="husky",
                  length:str="short",
                  colour:str="WHITE",
                  white_patches:str=None,
@@ -198,7 +195,6 @@ class Pelt():
         
         self.reverse = reverse
         self.skin = skin
-        self.species = species
 
     @staticmethod
     def generate_new_pelt(gender:str, parents:tuple=(), age:str="adult"):
@@ -212,8 +208,6 @@ class Pelt():
         new_pelt.init_eyes(parents)
         new_pelt.init_pattern()
         new_pelt.init_tint()
-        new_pelt.species = ""
-        new_pelt.species = random.choice(Pelt.species_options)
         
         return new_pelt
     
@@ -346,7 +340,6 @@ class Pelt():
         par_peltnames = set()
         par_pelts = []
         par_white = []
-        par_species = set()
         for p in parents:
             if p:
                 # Gather pelt color.
@@ -366,9 +359,6 @@ class Pelt():
 
                 # Gather if they have white in their pelt.
                 par_white.append(p.pelt.white)
-                
-                # Gather species?
-                par_species.add(p.pelt.species)
             else:
                 # If order for white patches to work correctly, we also want to randomly generate a "pelt_white"
                 # for each "None" parent (missing or unknown parent)
@@ -379,7 +369,6 @@ class Pelt():
                 par_peltcolours.add(None)
                 par_peltlength.add(None)
                 par_peltnames.add(None)
-                par_species.add(None)
 
         # If this list is empty, something went wrong.
         if not par_peltcolours:
@@ -393,7 +382,6 @@ class Pelt():
             self.length = selected.length
             self.colour = selected.colour
             self.tortiebase = selected.tortiebase
-            self.species = selected.species
             return selected.white
 
         # ------------------------------------------------------------------------------------------------------------#

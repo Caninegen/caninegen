@@ -215,6 +215,7 @@ def create_new_cat(Cat,
                    other_clan:bool=None,
                    backstory:bool=None,
                    status:str=None,
+                   species:str=None,
                    age:int=None,
                    gender:str=None,
                    thought:str='Is looking around the camp with wonder',
@@ -235,6 +236,7 @@ def create_new_cat(Cat,
     :param other_clan: if new cat(s) are from a neighboring clan, set true
     :param backstory: a list of possible backstories.json for the new cat(s) - default: None
     :param status: set as the rank you want the new cat to have - default: None (will cause a random status to be picked)
+    :param species: species of the new cat(s) - default: None (will be randomly chosen)
     :param age: set the age of the new cat(s) - default: None (will be random or if kit/litter is true, will be kitten.
     :param gender: set the gender (BIRTH SEX) of the cat - default: None (will be random)
     :param thought: if you need to give a custom "welcome" thought, set it here
@@ -297,9 +299,10 @@ def create_new_cat(Cat,
             _gender = gender
 
         # other Clan cats, apps, and kittens (kittens and apps get indoctrinated lmao no old names for them)
-        if other_clan or kit or litter or age < 12 and not (loner or kittypet):
+        if other_clan or kit or litter or age < 12:
             new_cat = Cat(moons=age,
                           status=status,
+                          species=species,
                           gender=_gender,
                           backstory=backstory,
                           parent1=parent1,
@@ -329,6 +332,7 @@ def create_new_cat(Cat,
                     new_cat = Cat(moons=age,
                                   prefix=name,
                                   status=status,
+                                  species=species,
                                   gender=_gender,
                                   backstory=backstory,
                                   parent1=parent1,
@@ -336,6 +340,7 @@ def create_new_cat(Cat,
                 else:  # completely new name
                     new_cat = Cat(moons=age,
                                   status=status,
+                                  species=species,
                                   gender=_gender,
                                   backstory=backstory,
                                   parent1=parent1,
@@ -346,6 +351,7 @@ def create_new_cat(Cat,
                               prefix=name,
                               suffix="",
                               status=status,
+                              species=species,
                               gender=_gender,
                               backstory=backstory,
                               parent1=parent1,
@@ -659,20 +665,16 @@ def change_relationship_values(cats_to: list,
         changed = True"""
 
     # pick out the correct cats
-    for single_cat_from in cats_from:
-        for single_cat_to_ID in cats_to:
-            single_cat_to = single_cat_from.fetch_cat(single_cat_to_ID)
+    for kitty in cats_from:
+        relationships = [i for i in kitty.relationships.values() if i.cat_to.ID in cats_to]
 
-            if single_cat_from == single_cat_to:
+        # make sure that cats don't gain rel with themselves
+        for rel in relationships:
+            if kitty.ID == rel.cat_to.ID:
                 continue
-            
-            if single_cat_to_ID not in single_cat_from.relationships:
-                single_cat_from.create_one_relationship(single_cat_to)
-
-            rel = single_cat_from.relationships[single_cat_to_ID]
 
             # here we just double-check that the cats are allowed to be romantic with each other
-            if single_cat_from.is_potential_mate(single_cat_to, for_love_interest=True) or single_cat_to.ID in single_cat_from.mate:
+            if kitty.is_potential_mate(rel.cat_to, for_love_interest=True) or rel.cat_to.ID in kitty.mate:
                 # if cat already has romantic feelings then automatically increase romantic feelings
                 # when platonic feelings would increase
                 if rel.romantic_love > 0 and auto_romance:
@@ -1018,7 +1020,7 @@ def event_text_adjust(Cat,
 
     if murder_reveal and victim:
         victim_cat = Cat.fetch_cat(victim)
-        cat_dict["mur_c"] = (str(victim_cat.name), choice(victim_cat.pronouns))
+        text = text.replace("mur_c", str(victim_cat.name))
 
     # Dreams and Omens
     text, senses, list_type = find_special_list_types(text)
@@ -1234,12 +1236,15 @@ def generate_sprite(cat, life_state=None, scars_hidden=False, acc_hidden=False, 
 
     # generating the sprite
     try:
+        # checks index of cat's species in the species list and uses matching folder's sprites
+        n = (game.species["species"].index(cat.species)) + 1 #add 1 because people don't count from 0 smh
+
         if cat.pelt.name not in ['Tortie', 'Calico']:
-            new_sprite.blit(sprites.sprites[cat.pelt.get_sprites_name() + cat.pelt.colour + cat_sprite], (0, 0))
+            new_sprite.blit(sprites.sprites[cat.pelt.get_sprites_name() + f'{n}_' + cat.pelt.colour + cat_sprite], (0, 0))
         else:
             # Base Coat
             new_sprite.blit(
-                sprites.sprites[cat.pelt.tortiebase + cat.pelt.colour + cat_sprite],
+                sprites.sprites[cat.pelt.tortiebase + f'{n}_' + cat.pelt.colour + cat_sprite],
                 (0, 0))
 
             # Create the patch image
@@ -1249,8 +1254,8 @@ def generate_sprite(cat, life_state=None, scars_hidden=False, acc_hidden=False, 
                 tortie_pattern = cat.pelt.tortiepattern
 
             patches = sprites.sprites[
-                tortie_pattern + cat.pelt.tortiecolour + cat_sprite].copy()
-            patches.blit(sprites.sprites["tortiemask" + cat.pelt.pattern + cat_sprite], (0, 0),
+                tortie_pattern + f'{n}_' + cat.pelt.tortiecolour + cat_sprite].copy()
+            patches.blit(sprites.sprites["tortiemask" + f'{n}_' + cat.pelt.pattern + cat_sprite], (0, 0),
                          special_flags=pygame.BLEND_RGBA_MULT)
 
             # Add patches onto cat.
@@ -1267,7 +1272,7 @@ def generate_sprite(cat, life_state=None, scars_hidden=False, acc_hidden=False, 
 
         # draw white patches
         if cat.pelt.white_patches is not None:
-            white_patches = sprites.sprites['white' + cat.pelt.white_patches + cat_sprite].copy()
+            white_patches = sprites.sprites['white' + f'{n}_' + cat.pelt.white_patches + cat_sprite].copy()
 
             # Apply tint to white patches.
             if cat.pelt.white_patches_tint != "none" and cat.pelt.white_patches_tint in sprites.white_patches_tints[
@@ -1281,7 +1286,7 @@ def generate_sprite(cat, life_state=None, scars_hidden=False, acc_hidden=False, 
         # draw vit & points
 
         if cat.pelt.points:
-            points = sprites.sprites['white' + cat.pelt.points + cat_sprite].copy()
+            points = sprites.sprites['white' + f'{n}_' + cat.pelt.points + cat_sprite].copy()
             if cat.pelt.white_patches_tint != "none" and cat.pelt.white_patches_tint in sprites.white_patches_tints[
                 "tint_colours"]:
                 tint = pygame.Surface((sprites.size, sprites.size)).convert_alpha()
@@ -1290,49 +1295,49 @@ def generate_sprite(cat, life_state=None, scars_hidden=False, acc_hidden=False, 
             new_sprite.blit(points, (0, 0))
 
         if cat.pelt.vitiligo:
-            new_sprite.blit(sprites.sprites['white' + cat.pelt.vitiligo + cat_sprite], (0, 0))
+            new_sprite.blit(sprites.sprites['white' + f'{n}_' + cat.pelt.vitiligo + cat_sprite], (0, 0))
 
         # draw eyes & scars1
-        eyes = sprites.sprites['eyes' + cat.pelt.eye_colour + cat_sprite].copy()
+        eyes = sprites.sprites['eyes' + f'{n}_' + cat.pelt.eye_colour + cat_sprite].copy()
         if cat.pelt.eye_colour2 != None:
-            eyes.blit(sprites.sprites['eyes2' + cat.pelt.eye_colour2 + cat_sprite], (0, 0))
+            eyes.blit(sprites.sprites['eyes2' + f'{n}_' + cat.pelt.eye_colour2 + cat_sprite], (0, 0))
         new_sprite.blit(eyes, (0, 0))
 
         if not scars_hidden:
             for scar in cat.pelt.scars:
                 if scar in cat.pelt.scars1:
-                    new_sprite.blit(sprites.sprites['scars' + scar + cat_sprite], (0, 0))
+                    new_sprite.blit(sprites.sprites['scars' + f'{n}_' + scar + cat_sprite], (0, 0))
                 if scar in cat.pelt.scars3:
-                    new_sprite.blit(sprites.sprites['scars' + scar + cat_sprite], (0, 0))
+                    new_sprite.blit(sprites.sprites['scars' + f'{n}_' + scar + cat_sprite], (0, 0))
 
         # draw line art
         if game.settings['shaders'] and not dead:
-            new_sprite.blit(sprites.sprites['shaders' + cat_sprite], (0, 0), special_flags=pygame.BLEND_RGB_MULT)
-            new_sprite.blit(sprites.sprites['lighting' + cat_sprite], (0, 0))
+            new_sprite.blit(sprites.sprites['shaders' + f'{n}_' + cat_sprite], (0, 0), special_flags=pygame.BLEND_RGB_MULT)
+            new_sprite.blit(sprites.sprites['lighting' + f'{n}_' + cat_sprite], (0, 0))
 
         if not dead:
-            new_sprite.blit(sprites.sprites['lines' + cat_sprite], (0, 0))
+            new_sprite.blit(sprites.sprites['lines' + f'{n}_' + cat_sprite], (0, 0))
         elif cat.df:
-            new_sprite.blit(sprites.sprites['lineartdf' + cat_sprite], (0, 0))
+            new_sprite.blit(sprites.sprites['lineartdf' + f'{n}_' + cat_sprite], (0, 0))
         elif dead:
-            new_sprite.blit(sprites.sprites['lineartdead' + cat_sprite], (0, 0))
+            new_sprite.blit(sprites.sprites['lineartdead' + f'{n}_' + cat_sprite], (0, 0))
         # draw skin and scars2
         blendmode = pygame.BLEND_RGBA_MIN
-        new_sprite.blit(sprites.sprites['skin' + cat.pelt.skin + cat_sprite], (0, 0))
+        new_sprite.blit(sprites.sprites['skin' + f'{n}_' + cat.pelt.skin + cat_sprite], (0, 0))
         
         if not scars_hidden:
             for scar in cat.pelt.scars:
                 if scar in cat.pelt.scars2:
-                    new_sprite.blit(sprites.sprites['scars' + scar + cat_sprite], (0, 0), special_flags=blendmode)
+                    new_sprite.blit(sprites.sprites['scars' + f'{n}_' + scar + cat_sprite], (0, 0), special_flags=blendmode)
 
         # draw accessories
         if not acc_hidden:        
             if cat.pelt.accessory in cat.pelt.plant_accessories:
-                new_sprite.blit(sprites.sprites['acc_herbs' + cat.pelt.accessory + cat_sprite], (0, 0))
+                new_sprite.blit(sprites.sprites['acc_herbs' + f'{n}_' + cat.pelt.accessory + cat_sprite], (0, 0))
             elif cat.pelt.accessory in cat.pelt.wild_accessories:
-                new_sprite.blit(sprites.sprites['acc_wild' + cat.pelt.accessory + cat_sprite], (0, 0))
+                new_sprite.blit(sprites.sprites['acc_wild' + f'{n}_' + cat.pelt.accessory + cat_sprite], (0, 0))
             elif cat.pelt.accessory in cat.pelt.collars:
-                new_sprite.blit(sprites.sprites['collars' + cat.pelt.accessory + cat_sprite], (0, 0))
+                new_sprite.blit(sprites.sprites['collars' + f'{n}_' + cat.pelt.accessory + cat_sprite], (0, 0))
 
         # Apply fading fog
         if cat.pelt.opacity <= 97 and not cat.prevent_fading and game.clan.clan_settings["fading"] and dead:
@@ -1345,15 +1350,15 @@ def generate_sprite(cat, life_state=None, scars_hidden=False, acc_hidden=False, 
                 # Stage 2
                 stage = "2"
 
-            new_sprite.blit(sprites.sprites['fademask' + stage + cat_sprite],
+            new_sprite.blit(sprites.sprites['fademask' + f'{n}_' + stage + cat_sprite],
                             (0, 0), special_flags=pygame.BLEND_RGBA_MULT)
 
             if cat.df:
-                temp = sprites.sprites['fadedf' + stage + cat_sprite].copy()
+                temp = sprites.sprites['fadedf' + f'{n}_' + stage + cat_sprite].copy()
                 temp.blit(new_sprite, (0, 0))
                 new_sprite = temp
             else:
-                temp = sprites.sprites['fadestarclan' + stage + cat_sprite].copy()
+                temp = sprites.sprites['fadestarclan' + f'{n}_' + stage + cat_sprite].copy()
                 temp.blit(new_sprite, (0, 0))
                 new_sprite = temp
 
