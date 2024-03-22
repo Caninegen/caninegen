@@ -50,8 +50,7 @@ class Pelt():
                     'OREO', 'SWOOP', 'MOTTLED', 'SIDEMASK', 'EYEDOT', 'BANDANA', 'PACMAN', 'STREAMSTRIKE', 'ORIOLE', 'CHIMERA', 'DAUB', 'EMBER', 'BLANKET',
                     'ROBIN', 'BRINDLE', 'PAIGE', 'ROSETAIL', 'SAFI', 'SMUDGED', 'DAPPLENIGHT', 'STREAK', 'MASK', 'CHEST', 'ARMTAIL', 'SMOKE', 'GRUMPYFACE',
                     'BRIE', 'BELOVED', 'BODY', 'SHILOH', 'FRECKLED', 'HEARTBEAT']
-    tortiebases = ['single', 'tabby', 'bengal', 'marbled', 'ticked', 'smoke', 'rosette', 'speckled', 'mackerel',
-                'classic', 'sokoke', 'agouti', 'singlestripe', 'masked']
+    tortiebases = ['single']
 
     pelt_length = ["short", "medium", "long"]
     eye_colours = ['YELLOW', 'AMBER', 'HAZEL', 'PALEGREEN', 'GREEN', 'BLUE', 'DARKBLUE', 'GREY', 'CYAN', 'EMERALD', 'PALEBLUE', 
@@ -88,12 +87,9 @@ class Pelt():
         "BLACKNYLON", "SPIKESNYLON", "WHITENYLON", "PINKNYLON", "PURPLENYLON", "MULTINYLON", "INDIGONYLON",
     ]
 
-    tabbies = ["Tabby", "Ticked", "Mackerel", "Classic", "Sokoke", "Agouti"]
-    spotted = ["Speckled", "Rosette"]
-    plain = ["SingleColour", "TwoColour", "Smoke", "Singlestripe"]
-    exotic = ["Bengal", "Marbled", "Masked"]
+    plain = ["SingleColour", "TwoColour"]
     torties = ["Tortie", "Calico"]
-    pelt_categories = [tabbies, spotted, plain, exotic, torties]
+    pelt_categories = [plain, torties]
 
     # SPRITE NAMES
     single_colours = [
@@ -391,14 +387,8 @@ class Pelt():
         # Determine pelt.
         weights = [0, 0, 0, 0]  #Weights for each pelt group. It goes: (tabbies, spotted, plain, exotic)
         for p_ in par_peltnames:
-            if p_ in Pelt.tabbies:
-                add_weight = (50, 10, 5, 7)
-            elif p_ in Pelt.spotted:
-                add_weight = (10, 50, 5, 5)
-            elif p_ in Pelt.plain:
+            if p_ in Pelt.plain:
                 add_weight = (5, 5, 50, 0)
-            elif p_ in Pelt.exotic:
-                add_weight = (15, 15, 1, 45)
             elif p_ is None:  # If there is at least one unknown parent, a None will be added to the set.
                 add_weight = (35, 20, 30, 15)
             else:
@@ -535,7 +525,7 @@ class Pelt():
 
         # Determine pelt.
         chosen_pelt = choice(
-            random.choices(Pelt.pelt_categories, weights=(35, 20, 30, 15, 0), k=1)[0]
+            random.choices(Pelt.pelt_categories, weights=(35, 20), k=1)[0]
         )
 
         # Tortie chance
@@ -696,9 +686,8 @@ class Pelt():
 
                 else:
                     # Normal generation
-                    if self.tortiebase in ["singlestripe", "smoke", "single"]:
-                        self.tortiepattern = choice(['tabby', 'mackerel', 'classic', 'single', 'smoke', 'agouti',
-                                                    'ticked'])
+                    if self.tortiebase in ["single"]:
+                        self.tortiepattern = ["single"]
                     else:
                         self.tortiepattern = random.choices([self.tortiebase, 'single'], weights=[97, 3], k=1)[0]
 
@@ -1001,10 +990,6 @@ class Pelt():
                     color_name = cat.pelt.name.lower()
             else:
                 base = cat.pelt.tortiebase.lower()
-                if base in Pelt.tabbies + ['bengal', 'rosette', 'speckled']:
-                    base = 'tabby'
-                else:
-                    base = ''
 
                 patches_color = cat.pelt.tortiecolour.lower()
                 if patches_color in renamed_colors:

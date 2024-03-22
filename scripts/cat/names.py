@@ -64,7 +64,8 @@ class Name():
                  tortiepattern=None,
                  biome=None,
                  specsuffix_hidden=False,
-                 load_existing_name=False):
+                 load_existing_name=False
+                 ):
         self.status = status
         self.prefix = prefix
         self.suffix = suffix
@@ -158,9 +159,7 @@ class Name():
             named_after_biome = not random.getrandbits(3)  # 1/8
             # Pelt name only gets used if there's an associated suffix.
             if named_after_pelt:
-                if pelt in ["Tortie", "Calico"] and tortiepattern in self.names_dict["tortie_pelt_suffixes"]:
-                    self.suffix = random.choice(self.names_dict["tortie_pelt_suffixes"][tortiepattern])
-                elif pelt in self.names_dict["pelt_suffixes"]:
+                if pelt in self.names_dict["pelt_suffixes"]:
                     self.suffix = random.choice(self.names_dict["pelt_suffixes"][pelt])
                 else:
                     self.suffix = random.choice(self.names_dict["normal_suffixes"])
@@ -173,12 +172,12 @@ class Name():
                 self.suffix = random.choice(self.names_dict["normal_suffixes"])
 
     def __repr__(self):
+        # Handles predefined suffixes (such as newborns being kit), then suffixes based on ages (fixes #2004, just trust me)
         if self.status in self.names_dict["special_suffixes"] and not self.specsuffix_hidden:
             return self.prefix + self.names_dict["special_suffixes"][self.status]
-        else:
-            if game.config['fun']['april_fools']:
-                return self.prefix + 'egg'
-            return self.prefix + self.suffix
+        if game.config['fun']['april_fools']:
+            return self.prefix + 'egg'
+        return self.prefix + self.suffix
 
 
 names = Name()
