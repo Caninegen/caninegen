@@ -70,7 +70,7 @@ class Events:
                 str(cat.status) in {
                     'leader', 'deputy', 'warrior', 'medicine cat',
                     'medicine cat apprentice', 'apprentice', 'mediator',
-                    'mediator apprentice'
+                    'mediator apprentice', 'denmother'
                 } and not cat.dead and not cat.outside
                 for cat in Cat.all_cats.values()):
             game.switches['no_able_left'] = False

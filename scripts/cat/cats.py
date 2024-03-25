@@ -58,8 +58,13 @@ class Cat():
         "medicine cat apprentice",
         "medicine cat",
         "deputy",
-        "leader"
+        "leader",
+        "denmother"
     ]
+    # TODO 
+    # make it so that denmother & leader randomize which is on top. or maybe based
+    # on traits? either use id like warriors would OR have it just randomize.
+    # not sure yet
 
     gender_tags = {'female': 'F', 'male': 'M'}
 
@@ -794,6 +799,17 @@ class Cat():
 
         elif self.status == 'mediator':
             pass
+        elif self.status == 'denmother':
+            pass
+        # you will not be able to change denmothers until one passes, in which you can chooose
+        # a daughter to become new denmother. it'll give warnings like when you don't have a 
+        # deputy.
+        # with denmothers, when they have puppies, randomize if they leave to have pups
+        # like going into nursery or not w base game
+        # when this happens, have them & the pups when born listed in cotc. then you can see newborn sprites
+        # also randomize if the partner will come with or not
+        # then, when she returns, the pups will be a moon old
+
 
         elif self.status == 'mediator apprentice':
             pass

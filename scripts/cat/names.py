@@ -53,7 +53,6 @@ class Name():
                         elif ':' in new_name:
                             _tmp = new_name.split(':')
                             names_dict["special_suffixes"][_tmp[0]] = _tmp[1]
-
     def __init__(self,
                  status="warrior",
                  prefix=None,
@@ -173,8 +172,13 @@ class Name():
 
     def __repr__(self):
         # Handles predefined suffixes (such as newborns being kit), then suffixes based on ages (fixes #2004, just trust me)
-        if self.status in self.names_dict["special_suffixes"] and not self.specsuffix_hidden:
+        if self.status in self.names_dict["special_suffixes"] and self.status in self.names_dict["special_prefixes"] and not self.specsuffix_hidden:
+            return self.names_dict["special_prefixes"][self.status] + self.names_dict["special_suffixes"][self.status]
+        elif self.status in self.names_dict["special_suffixes"] and not self.specsuffix_hidden:
             return self.prefix + self.names_dict["special_suffixes"][self.status]
+        elif self.status in self.names_dict["special_prefixes"] and not self.specsuffix_hidden:
+            return self.names_dict["special_prefixes"][self.status] + self.suffix
+        
         if game.config['fun']['april_fools']:
             return self.prefix + 'egg'
         return self.prefix + self.suffix

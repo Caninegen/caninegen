@@ -23,6 +23,8 @@ class MakeClanScreen(Screens):
         'resources/images/pick_clan_screen/name_clan_light.png').convert_alpha(), (1600, 1400))
     leader_img = pygame.transform.scale(pygame.image.load(
         'resources/images/pick_clan_screen/leader_light.png').convert_alpha(), (1600, 1400))
+    denmother_img = pygame.transform.scale(pygame.image.load(
+        'resources/images/pick_clan_screen/leader_light.png').convert_alpha(), (1600, 1400))
     deputy_img = pygame.transform.scale(pygame.image.load(
         'resources/images/pick_clan_screen/deputy_light.png').convert_alpha(), (1600, 1400))
     medic_img = pygame.transform.scale(pygame.image.load(
@@ -55,6 +57,7 @@ class MakeClanScreen(Screens):
     game_mode = 'classic'  # To save the users selection before conformation.
     clan_name = ""  # To store the Clan name before conformation
     leader = None  # To store the Clan leader before conformation
+    denmother = None  # To store the denmother before conformation
     deputy = None
     med_cat = None
     members = []
@@ -90,6 +93,7 @@ class MakeClanScreen(Screens):
         self.selected_season = "Newleaf"
         self.choosing_rank = None
         self.leader = None  # To store the Clan leader before conformation
+        self.denmother = None  # To store the denmother before conformation
         self.deputy = None
         self.med_cat = None
         self.members = []
@@ -116,6 +120,8 @@ class MakeClanScreen(Screens):
                 self.handle_name_clan_event(event)
             elif self.sub_screen == 'choose leader':
                 self.handle_choose_leader_event(event)
+            elif self.sub_screen == 'choose denmother':
+                self.handle_choose_denmother_event(event)
             elif self.sub_screen == 'choose deputy':
                 self.handle_choose_deputy_event(event)
             elif self.sub_screen == 'choose med cat':
@@ -191,7 +197,7 @@ class MakeClanScreen(Screens):
                 self.elements["error"].show()
                 return
             self.clan_name = new_name
-            self.open_choose_leader()
+            self.open_choose_denmother()
         elif event.ui_element == self.elements['previous_step']:
             self.clan_name = ""
             self.open_game_mode()
@@ -215,7 +221,7 @@ class MakeClanScreen(Screens):
                     self.elements["error"].show()
                     return
                 self.clan_name = new_name
-                self.open_choose_leader()
+                self.open_choose_denmother()
         elif event.key == pygame.K_RETURN:
             new_name = sub(r'[^A-Za-z0-9 ]+', "", self.elements["name_entry"].get_text()).strip()
             if not new_name:
@@ -227,8 +233,42 @@ class MakeClanScreen(Screens):
                 self.elements["error"].show()
                 return
             self.clan_name = new_name
-            self.open_choose_leader()
+            self.open_choose_denmother()
+    def handle_choose_denmother_event(self, event):
+        if event.ui_element in [self.elements['roll1'], self.elements['roll2'], self.elements['roll3'],
+                                self.elements["dice"]]:
+            self.elements['select_cat'].hide()
+            create_example_cats()  # create new cats
+            self.selected_cat = None  # Your selected cat now no longer exists. Sad. They go away.
+            if self.elements['error_message']:
+                self.elements['error_message'].hide()
+            self.refresh_cat_images_and_info()  # Refresh all the images.
+            self.rolls_left -= 1
+            if game.config["clan_creation"]["rerolls"] == 3:
+                event.ui_element.disable()
+            else:
+                self.elements["reroll_count"].set_text(str(self.rolls_left))
+                if self.rolls_left == 0:
+                    event.ui_element.disable()
 
+        elif event.ui_element in [self.elements["cat" + str(u)] for u in range(0, 12)]:
+            if pygame.key.get_mods() & pygame.KMOD_SHIFT:
+                clicked_cat = event.ui_element.return_cat_object()
+                if clicked_cat.age not in ["newborn", "kitten", "adolescent"]:
+                    self.denmother = clicked_cat
+                    self.selected_cat = None
+                    self.open_choose_leader()
+            else:
+                self.selected_cat = event.ui_element.return_cat_object()
+                self.refresh_cat_images_and_info(self.selected_cat)
+                self.refresh_text_and_buttons()
+        elif event.ui_element == self.elements['select_cat']:
+            self.denmother = self.selected_cat
+            self.selected_cat = None
+            self.open_choose_leader()
+        elif event.ui_element == self.elements['previous_step']:
+            self.clan_name = ""
+            self.open_name_clan()
     def handle_choose_leader_event(self, event):
         if event.ui_element in [self.elements['roll1'], self.elements['roll2'], self.elements['roll3'],
                                 self.elements["dice"]]:
@@ -519,7 +559,7 @@ class MakeClanScreen(Screens):
             else:
                 self.elements['next_step'].enable()
         # Show the error message if you try to choose a child for leader, deputy, or med cat.
-        elif self.sub_screen in ['choose leader', 'choose deputy', 'choose med cat']:
+        elif self.sub_screen in ['choose leader', 'choose deputy', 'choose med cat', 'choose denmother']:
             if self.selected_cat.age in ["newborn", "kitten", "adolescent"]:
                 self.elements['select_cat'].hide()
                 self.elements['error_message'].show()
@@ -715,6 +755,11 @@ class MakeClanScreen(Screens):
                                                    ' --> ' +
                                                    selected.name.prefix +
                                                    'star')
+            elif self.sub_screen == 'choose denmother':
+                self.elements['cat_name'].set_text(str(selected.name) +
+                                                   ' --> ' +
+                                                   selected.name.prefix +
+                                                   'mother')
             else:
                 self.elements['cat_name'].set_text(str(selected.name))
             self.elements['cat_name'].show()
@@ -747,7 +792,7 @@ class MakeClanScreen(Screens):
                     scale(pygame.Rect((540, 400), (300, 300))),
                     pygame.transform.scale(game.choose_cats[u].sprite, (300, 300)),
                     cat_object=game.choose_cats[u])
-            elif game.choose_cats[u] in [self.leader, self.deputy, self.med_cat] + self.members:
+            elif game.choose_cats[u] in [self.denmother, self.leader, self.deputy, self.med_cat] + self.members:
                 self.elements["cat" + str(u)] = UISpriteButton(scale(pygame.Rect((1300, 250 + 100 * u), (100, 100))),
                                                                game.choose_cats[u].sprite,
                                                                cat_object=game.choose_cats[u], manager=MANAGER)

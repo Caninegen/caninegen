@@ -49,6 +49,7 @@ class Clan():
         "leader",
         "elder",
         "mediator",
+        "denmother",
         "general",
     ]
 
@@ -81,9 +82,11 @@ class Clan():
 
     def __init__(self,
                  name="",
+                 denmother=None,
                  leader=None,
                  deputy=None,
                  medicine_cat=None,
+
                  biome='Forest',
                  camp_bg=None,
                  game_mode='classic',
@@ -94,12 +97,17 @@ class Clan():
             return
         
         self.name = name
+        self.denmother = denmother
         self.leader = leader
         if self.leader:
             self.leader.status_change('leader')
             self.clan_cats.append(self.leader.ID)
+        if self.denmother:
+            self.denmother.status_change('denmother')
+            self.clan_cats.append(self.denmother.ID)
         self.leader_lives = 9
         self.leader_predecessors = 0
+        self.denmother_predecessors = 0
         self.deputy = deputy
         if deputy is not None:
             self.deputy.status_change('deputy')
@@ -178,7 +186,7 @@ class Clan():
         the program starts
         """
         self.instructor = Cat(status=choice(["apprentice", "mediator apprentice", "medicine cat apprentice", "warrior",
-                                             "medicine cat", "leader", "mediator", "deputy", "elder"]),
+                                             "medicine cat", "leader", "mediator", "deputy", "elder", "denmother"]),
                               )
         self.instructor.dead = True
         self.instructor.dead_for = randint(20, 200)
@@ -332,7 +340,7 @@ class Clan():
 
     def __repr__(self):
         if self.name is not None:
-            _ = f'{self.name}: led by {self.leader.name}' \
+            _ = f'{self.name}: led by {self.leader.name} and denmother {self.denmother.name}' \
                 f'with {self.medicine_cat.name} as med. cat'
             return _
 
@@ -350,6 +358,16 @@ class Clan():
             self.leader_predecessors += 1
             self.leader_lives = 9
         game.switches['new_leader'] = None
+    def new_denmother(self, denmother):
+        """
+        TODO: DOCS
+        """
+        if denmother:
+            self.history.add_lead_ceremony(denmother)
+            self.denmother = denmother
+            Cat.all_cats[denmother.ID].status_change('denmothyer')
+            self.denmother_predecessors += 1
+        game.switches['new_denmother'] = None
 
     def new_deputy(self, deputy):
         """
@@ -427,6 +445,14 @@ class Clan():
             clan_data["leader"] = None
 
         clan_data["leader_predecessors"] = self.leader_predecessors
+
+        # DENMOTHER DATA
+        if self.denmother:
+            clan_data["denmother"] = self.denmother.ID
+        else:
+            clan_data["denmother"] = None
+
+        clan_data["denmother_predecessors"] = self.leader_predecessors
 
         # DEPUTY DATA
         if self.deputy:
@@ -538,29 +564,32 @@ class Clan():
             clan_data = read_file.read()
         clan_data = clan_data.replace('\t', ',')
         sections = clan_data.split('\n')
-        if len(sections) == 7:
+        if len(sections) == 8:
             general = sections[0].split(',')
             leader_info = sections[1].split(',')
-            deputy_info = sections[2].split(',')
-            med_cat_info = sections[3].split(',')
-            instructor_info = sections[4]
-            members = sections[5].split(',')
-            other_clans = sections[6].split(',')
-        elif len(sections) == 6:
+            denmother_info = sections[2].split(',')
+            deputy_info = sections[3].split(',')
+            med_cat_info = sections[4].split(',')
+            instructor_info = sections[5]
+            members = sections[6].split(',')
+            other_clans = sections[7].split(',')
+        elif len(sections) == 7:
             general = sections[0].split(',')
             leader_info = sections[1].split(',')
-            deputy_info = sections[2].split(',')
-            med_cat_info = sections[3].split(',')
-            instructor_info = sections[4]
-            members = sections[5].split(',')
+            denmother_info = sections[2].split(',')
+            deputy_info = sections[3].split(',')
+            med_cat_info = sections[4].split(',')
+            instructor_info = sections[5]
+            members = sections[6].split(',')
             other_clans = []
         else:
             general = sections[0].split(',')
             leader_info = sections[1].split(',')
+            denmother_info = sections[2].split(',')
             deputy_info = 0, 0
-            med_cat_info = sections[2].split(',')
-            instructor_info = sections[3]
-            members = sections[4].split(',')
+            med_cat_info = sections[3].split(',')
+            instructor_info = sections[4]
+            members = sections[5].split(',')
             other_clans = []
         if len(general) == 9:
             if general[3] == 'None':
@@ -573,6 +602,7 @@ class Clan():
                 general[8] = 50
             game.clan = Clan(general[0],
                              Cat.all_cats[leader_info[0]],
+                             Cat.all_cats[denmother_info[0]],
                              Cat.all_cats.get(deputy_info[0], None),
                              Cat.all_cats.get(med_cat_info[0], None),
                              biome=general[2],
@@ -589,6 +619,7 @@ class Clan():
             game.clan = Clan(
                 general[0],
                 Cat.all_cats[leader_info[0]],
+                Cat.all_cats[denmother_info[0]],
                 Cat.all_cats.get(deputy_info[0], None),
                 Cat.all_cats.get(med_cat_info[0], None),
                 biome=general[2],
@@ -603,6 +634,7 @@ class Clan():
             game.clan = Clan(
                 general[0],
                 Cat.all_cats[leader_info[0]],
+                Cat.all_cats[denmother_info[0]],
                 Cat.all_cats.get(deputy_info[0], None),
                 Cat.all_cats.get(med_cat_info[0], None),
                 biome=general[2],
@@ -610,11 +642,13 @@ class Clan():
             )
         elif len(general) == 3:
             game.clan = Clan(general[0], Cat.all_cats[leader_info[0]],
+                             Cat.all_cats[denmother_info[0]],
                              Cat.all_cats.get(deputy_info[0], None),
                              Cat.all_cats.get(med_cat_info[0], None),
                              general[2])
         else:
             game.clan = Clan(general[0], Cat.all_cats[leader_info[0]],
+                             Cat.all_cats[denmother_info[0]],
                              Cat.all_cats.get(deputy_info[0], None),
                              Cat.all_cats.get(med_cat_info[0], None))
         game.clan.age = int(general[1])
@@ -624,6 +658,7 @@ class Clan():
             game.clan.current_season = game.clan.starting_season
         game.clan.leader_lives, game.clan.leader_predecessors = int(
             leader_info[1]), int(leader_info[2])
+        game.clan.denmother_predecessors = int(denmother_info[1])
 
         if len(deputy_info) > 1:
             game.clan.deputy_predecessors = int(deputy_info[1])
@@ -691,6 +726,10 @@ class Clan():
         else:
             leader = None
             leader_lives = 0
+        if clan_data["denmother"]:
+            denmother = Cat.all_cats[clan_data["denmother"]]
+        else:
+            denmother = None
 
         if clan_data["deputy"]:
             deputy = Cat.all_cats[clan_data["deputy"]]
@@ -704,6 +743,7 @@ class Clan():
 
         game.clan = Clan(clan_data["clanname"],
                          leader,
+                         denmother,
                          deputy,
                          med_cat,
                          biome=clan_data["biome"],
@@ -719,7 +759,7 @@ class Clan():
 
         game.clan.leader_lives = leader_lives
         game.clan.leader_predecessors = clan_data["leader_predecessors"]
-
+        game.clan.denmother_predecessors = clan_data["denmother_predecessors"]
         game.clan.deputy_predecessors = clan_data["deputy_predecessors"]
         game.clan.med_cat_predecessors = clan_data["med_cat_predecessors"]
         game.clan.med_cat_number = clan_data["med_cat_number"]
@@ -1026,22 +1066,23 @@ class Clan():
             it's pretty resource-intensive to determine it. """
         
         all_cats = [i for i in Cat.all_cats_list if 
-                    i.status not in ["leader", "deputy"] and
+                    i.status not in ["leader", "deputy", "denmother"] and
                     not i.dead and 
                     not i.outside]
-        leader = Cat.fetch_cat(self.leader) if isinstance(Cat.fetch_cat(self.leader), Cat) else None 
+        leader = Cat.fetch_cat(self.leader) if isinstance(Cat.fetch_cat(self.leader), Cat) else None
+        denmother = Cat.fetch_cat(self.denmother) if isinstance(Cat.fetch_cat(self.denmother), Cat) else None 
         deputy = Cat.fetch_cat(self.deputy) if isinstance(Cat.fetch_cat(self.deputy), Cat) else None
         
         weight = 0.3
 
-        if (leader or deputy) and all_cats:
-            clan_sociability = round(weight * statistics.mean([i.personality.sociability for i in [leader, deputy] if i]) + \
+        if (leader or deputy or denmother) and all_cats:
+            clan_sociability = round(weight * statistics.mean([i.personality.sociability for i in [leader, deputy, denmother] if i]) + \
                 (1-weight) *  statistics.median([i.personality.sociability for i in all_cats]))
-            clan_aggression = round(weight * statistics.mean([i.personality.aggression for i in [leader, deputy] if i]) + \
+            clan_aggression = round(weight * statistics.mean([i.personality.aggression for i in [leader, deputy, denmother] if i]) + \
                 (1-weight) *  statistics.median([i.personality.aggression for i in all_cats]))
-        elif (leader or deputy):
-            clan_sociability = round(statistics.mean([i.personality.sociability for i in [leader, deputy] if i]))
-            clan_aggression = round(statistics.mean([i.personality.aggression for i in [leader, deputy] if i]))
+        elif (leader or deputy or denmother):
+            clan_sociability = round(statistics.mean([i.personality.sociability for i in [leader, deputy, denmother] if i]))
+            clan_aggression = round(statistics.mean([i.personality.aggression for i in [leader, deputy, denmother] if i]))
         elif all_cats:
             clan_sociability = round(statistics.median([i.personality.sociability for i in all_cats]))
             clan_aggression = round(statistics.median([i.personality.aggression for i in all_cats]))

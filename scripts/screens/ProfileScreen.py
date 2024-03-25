@@ -468,8 +468,8 @@ class ProfileScreen(Screens):
             is_df_instructor = True
 
         # Info in string
-        cat_name = str(self.the_cat.name)
-        cat_name = shorten_text_to_fit(cat_name, 425, 40)
+        cat_name = str(self.the_cat.name) + " of " + game.clan.name + "pack"
+        cat_name = shorten_text_to_fit(cat_name, 600, 40)
         if self.the_cat.dead:
             cat_name += " (dead)"  # A dead cat will have the (dead) sign next to their name
         if is_sc_instructor:

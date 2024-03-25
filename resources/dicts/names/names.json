@@ -7,6 +7,8 @@
     "mediator apprentice": "pup",
     "leader": "star"
     },
+    "special_prefixes": {
+      },
   "normal_suffixes" : [
     "fur", "fur", "fur", "fur", "fur", "fur", "fur", "fur", "fur", "fur", "fur",
     "tuft", "tuft", "tuft", "tuft", "tuft", "tooth", "tooth", "tooth", "tooth", "tooth",
