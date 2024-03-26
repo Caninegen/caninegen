@@ -311,7 +311,7 @@ class ProfileScreen(Screens):
                         self.the_cat.outside, self.the_cat.exiled = False, False
                         self.the_cat.df = False
                         game.clan.add_to_starclan(self.the_cat)
-                        self.the_cat.thought = "Is relieved to once again hunt in StarClan"
+                        self.the_cat.thought = "Is relieved to once again hunt in StarPack"
                     else:
                         self.the_cat.outside, self.the_cat.exiled = False, False
                         self.the_cat.df = True
@@ -468,7 +468,7 @@ class ProfileScreen(Screens):
             is_df_instructor = True
 
         # Info in string
-        cat_name = str(self.the_cat.name) + " of " + game.clan.name + "pack"
+        cat_name = str(self.the_cat.name) + " of " + game.clan.name + "Pack"
         cat_name = shorten_text_to_fit(cat_name, 600, 40)
         if self.the_cat.dead:
             cat_name += " (dead)"  # A dead cat will have the (dead) sign next to their name
@@ -785,6 +785,14 @@ class ProfileScreen(Screens):
             output += "<font color='#FF0000'>lost</font>"
         elif the_cat.exiled:
             output += "<font color='#FF0000'>exiled</font>"
+        elif the_cat.status == 'medicine cat':
+            output += "cannydog"
+        elif the_cat.status == 'medicine cat apprentice':
+            output += "cannydog apprentice"
+        elif the_cat.status == 'deputy':
+            output += "cleverdog"
+        elif the_cat.status == 'kitten':
+            output += "puppy"
         else:
             output += the_cat.status
 

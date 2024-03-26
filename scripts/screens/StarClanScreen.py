@@ -207,7 +207,7 @@ class StarClanScreen(Screens):
                                                          manager=MANAGER)  # Text will be filled in later
 
         self.set_disabled_menu_buttons(["catlist_screen"])
-        self.update_heading_text("StarClan")
+        self.update_heading_text("StarPack")
         self.show_menu_buttons()
 
         self.update_search_cats("")  # This will list all the cats, and create the button objects.

@@ -180,7 +180,7 @@ class Events:
                         extra_event = f"So much grief and death has taken its toll on the cats of {game.clan.name}Clan. {insert} are particularly shaken by it. "
 
             else:
-                event = f"The past moon, {insert} has taken their place in StarClan. {game.clan.name}Clan mourns their " \
+                event = f"The past moon, {insert} has taken their place in StarPack. {game.clan.name}Pakck mourns their " \
                         f"loss, and their Clanmates will miss the spot they took up in their lives. Moments of their " \
                         f"life are shared in stories around the circle of mourners as those that were closest to them " \
                         f"take them to their final resting place."
@@ -513,7 +513,7 @@ class Events:
             event = random.choice(possible_events)
             game.herb_events_list.append(event)
             event_type = "health"
-            if f"{chosen_ally.name}Clan" in event:
+            if f"{chosen_ally.name}Pack" in event:
                 event_type = ["health", "other_clans"]
             game.cur_events_list.append(Single_Event(event, event_type))
 
@@ -925,7 +925,7 @@ class Events:
                     war_events.remove(event)
 
         event = random.choice(war_events)
-        event = ongoing_event_text_adjust(Cat, event, other_clan_name=f"{enemy_clan.name}Clan", clan=game.clan)
+        event = ongoing_event_text_adjust(Cat, event, other_clan_name=f"{enemy_clan.name}Pack", clan=game.clan)
         game.cur_events_list.append(
             Single_Event(event, "other_clans"))
 

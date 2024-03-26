@@ -121,7 +121,7 @@ class SwitchClanScreen(Screens):
             manager=MANAGER)
         if game.clan:
             self.current_clan.set_text(
-                f"The currently loaded Clan is {game.clan.name}Clan")
+                f"The currently loaded Clan is {game.clan.name}Pack")
         else:
             self.current_clan.set_text("There is no Clan currently loaded.")
 
@@ -138,7 +138,7 @@ class SwitchClanScreen(Screens):
             self.clan_buttons[-1].append(
                 pygame_gui.elements.UIButton(scale(
                     pygame.Rect((600, y_pos), (400, 78))),
-                    clan + "Clan",
+                    clan + "Pack",
                     object_id="#saved_clan",
                     manager=MANAGER))
             self.delete_buttons[-1].append(

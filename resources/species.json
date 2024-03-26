@@ -1,16 +1,23 @@
 {
     "species": [
         "husky",
-        "australian shepherd"
+        "australian shepherd",
+        "pitbull",
+        "golden retriever",
+        "german shepherd"
     ],
-    "ran_weights": [1, 1],
+    "ran_weights": [1, 1, 1, 1, 1],
     "in_weights": {
-        "husky": [1, 1],
-        "australian shepherd": [1, 1]
+        "husky": [1, 1, 1, 1, 1],
+        "australian shepherd": [1, 1, 1, 1, 1],
+        "pitbull": [1, 1, 1, 1, 1],
+        "golden retriever": [1, 1, 1, 1, 1],
+        "german shepherd": [1, 1, 1, 1, 1] 
     },
     "comment": [
         "ran_weights are used in species randomization, in_weights are used in inheritance.",
         "species name before the weights is the parent's species, the weights from both parents are added together.",
-        "all weights follow the order of the species list."
+        "all weights follow the order of the species list.",
+        "husky is 1 in sprites, aussie is 2, pitbull 3, golden 4, german shepherd 5"
     ]
 }

@@ -61,7 +61,7 @@ class Cat():
         "leader",
         "denmother"
     ]
-    # TODO 
+    #TODO
     # make it so that denmother & leader randomize which is on top. or maybe based
     # on traits? either use id like warriors would OR have it just randomize.
     # not sure yet
@@ -643,7 +643,7 @@ class Cat():
                             "Bargains with StarClan, begging them to send r_c back",
                             "Sat all night at r_c's vigil",
                             "Will never forget r_c",
-                            "Prays that r_c is safe in StarClan",
+                            "Prays that r_c is safe in StarPack",
                             "Misses the warmth that r_c brought to {PRONOUN/m_c/poss} life",
                             "Is mourning r_c"
                         )

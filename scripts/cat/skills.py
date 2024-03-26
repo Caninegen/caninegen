@@ -72,9 +72,9 @@ class SkillPath(Enum):
     )
     KIT = (
         "active imagination",
-        "good kitsitter",
-        "great kitsitter",
-        "beloved kitsitter"
+        "good pupsitter",
+        "great pupsitter",
+        "beloved pupsitter"
     )
     STORY = (
         "lover of stories",
@@ -101,10 +101,10 @@ class SkillPath(Enum):
         "fantastic healer"
     )
     STAR = (
-        "curious about StarClan",
-        "connection to Starclan",
-        "deep StarClan bond",
-        "unshakable StarClan link",
+        "curious about StarPack",
+        "connection to StarPack",
+        "deep StarPack bond",
+        "unshakable StarPack link",
     )
     DARK = (
         "interested in the Dark Forest",
@@ -141,6 +141,24 @@ class SkillPath(Enum):
         "ghost sense",
         "ghost sight",
         "ghost speaker"
+    )
+    TRACKER = (
+        "sniffs around camp",
+        "good nose",
+        "good tracker",
+        "amazing tracker"
+    )
+    HEAVY = (
+        "carries pups on their back",
+        "heavy body",
+        "heavy hitter",
+        "bruiser dog"
+    )
+    AGILE = (
+        "lean bodied",
+        "agile",
+        "jumper",
+        "agility dog"
     )
     
     @staticmethod
@@ -197,13 +215,15 @@ class Skill():
         SkillPath.LORE: "lorekeeping",
         SkillPath.CAMP: "campkeeping",
         SkillPath.HEALER: "healing",
-        SkillPath.STAR: "StarClan",
+        SkillPath.STAR: "StarPack",
         SkillPath.OMEN: "omen",
         SkillPath.DREAM: "dreaming",
         SkillPath.CLAIRVOYANT: "predicting",
         SkillPath.PROPHET: "prophesying",
         SkillPath.GHOST: "ghosts",
-        SkillPath.DARK: "dark forest"
+        SkillPath.DARK: "dark forest",
+        SkillPath.HEAVY: "heavy",
+        SkillPath.AGILE: "agile"
     }
     
     
@@ -340,7 +360,9 @@ class CatSkills:
         SkillPath.CLAIRVOYANT: SkillTypeFlag.SUPERNATURAL | SkillTypeFlag.OBSERVANT,
         SkillPath.PROPHET: SkillTypeFlag.SUPERNATURAL,
         SkillPath.GHOST: SkillTypeFlag.SUPERNATURAL,
-        SkillPath.DARK: SkillTypeFlag.SUPERNATURAL
+        SkillPath.DARK: SkillTypeFlag.SUPERNATURAL,
+        SkillPath.HEAVY: SkillTypeFlag.STRONG,
+        SkillPath.AGILE: SkillTypeFlag.AGILE
     }
     # pylint: enable=unsupported-binary-operation
     
@@ -641,7 +663,7 @@ class CatSkills:
         new_skill = CatSkills()
         
         conversion = {
-            "strong connection to StarClan": (SkillPath.STAR, 2), 
+            "strong connection to StarPack": (SkillPath.STAR, 2), 
             "good healer": (SkillPath.HEALER, 1),
             "great healer": (SkillPath.HEALER, 2),
             "fantastic healer": (SkillPath.HEALER, 3),

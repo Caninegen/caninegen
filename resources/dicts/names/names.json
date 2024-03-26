@@ -5,9 +5,11 @@
     "apprentice": "pup",
     "medicine cat apprentice": "pup",
     "mediator apprentice": "pup",
+    "deputy": "paw",
     "leader": "star"
     },
     "special_prefixes": {
+      "denmother": "Mother"
       },
   "normal_suffixes" : [
     "fur", "fur", "fur", "fur", "fur", "fur", "fur", "fur", "fur", "fur", "fur",

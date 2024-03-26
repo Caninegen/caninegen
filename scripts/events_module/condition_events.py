@@ -798,7 +798,7 @@ class Condition_Events():
 
                     if cat.age == 'adolescent':
                         event += f" They are given the name {cat.name.prefix}{cat.name.suffix} in honor " \
-                                    f"of their contributions to {game.clan.name}Clan."
+                                    f"of their contributions to {game.clan.name}Pack."
 
                     cat.retire_cat()
                     # Don't add this to the condition event list: instead make it it's own event, a ceremony. 

@@ -205,6 +205,7 @@ class Clan():
             if Cat.all_cats[i] != self.leader and Cat.all_cats[i] != \
                     self.medicine_cat and Cat.all_cats[i] != \
                     self.deputy and Cat.all_cats[i] != \
+                    self.denmother and Cat.all_cats[i] != \
                     self.instructor \
                     and not_found:
                 Cat.all_cats[i].example = True
@@ -365,7 +366,7 @@ class Clan():
         if denmother:
             self.history.add_lead_ceremony(denmother)
             self.denmother = denmother
-            Cat.all_cats[denmother.ID].status_change('denmothyer')
+            Cat.all_cats[denmother.ID].status_change('denmother')
             self.denmother_predecessors += 1
         game.switches['new_denmother'] = None
 
@@ -452,7 +453,7 @@ class Clan():
         else:
             clan_data["denmother"] = None
 
-        clan_data["denmother_predecessors"] = self.leader_predecessors
+        clan_data["denmother_predecessors"] = self.denmother_predecessors
 
         # DEPUTY DATA
         if self.deputy:
@@ -742,8 +743,8 @@ class Clan():
             med_cat = None
 
         game.clan = Clan(clan_data["clanname"],
-                         leader,
                          denmother,
+                         leader,
                          deputy,
                          med_cat,
                          biome=clan_data["biome"],
@@ -1130,7 +1131,7 @@ class OtherClan():
             self.temperament = choice(temperament_list)
 
     def __repr__(self):
-        return f"{self.name}Clan"
+        return f"{self.name}Pack"
 
 
 class StarClan():

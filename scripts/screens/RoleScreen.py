@@ -426,13 +426,13 @@ class RoleScreen(Screens):
                      f"Clan. They are trained to hunt and fight in addition to the ways of the warrior code. " \
                      f"Warriors are essential to the survival of a Clan, and usually make up the bulk of it's members. "
         elif self.the_cat.status == "leader":
-            output = f"{self.the_cat.name} is the <b>leader</b> of {game.clan.name}Clan. The guardianship of all " \
+            output = f"{self.the_cat.name} is the <b>leader</b> of {game.clan.name}Pack. The guardianship of all " \
                      f"Clan cats has been entrusted to them by StarClan. The leader is the highest " \
                      f"authority in the Clan. The leader holds Clan meetings, determines mentors for " \
                      f"new apprentices, and names new warriors. To help them protect the Clan, " \
                      f"StarClan has given them nine lives. They typically take the suffix \"star\"."
         elif self.the_cat.status == "deputy":
-            output = f"{self.the_cat.name} is {game.clan.name}Clan's <b>deputy</b>. " \
+            output = f"{self.the_cat.name} is {game.clan.name}Pack's <b>cleverdog</b>. " \
                      f"The deputy is the second in command, " \
                      f"just below the leader. They advise the leader and organize daily patrols, " \
                      f"alongside normal warrior duties. Typically, a deputy is personally appointed by the current " \
@@ -440,7 +440,7 @@ class RoleScreen(Screens):
                      f"before appointment.  " \
                      f"The deputy succeeds the leader if they die or retire. "
         elif self.the_cat.status == "medicine cat":
-            output = f"{self.the_cat.name} is a <b>medicine cat</b>. Medicine cats are the healers of the Clan. " \
+            output = f"{self.the_cat.name} is a <b>cannydog</b>. Medicine cats are the healers of the Clan. " \
                      f"They treat " \
                      f"injuries and illnesses with herbal remedies. Unlike warriors, medicine cats are not expected " \
                      f"to hunt and fight for the Clan. In addition to their healing duties, medicine cats also have " \

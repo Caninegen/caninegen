@@ -41,9 +41,9 @@ class SaveCheck(UIWindow):
                          object_id='#save_check_window',
                          resizable=False)
 
-        self.clan_name = "UndefinedClan"
+        self.clan_name = "UndefinedPack"
         if game.clan:
-            self.clan_name = f"{game.clan.name}Clan"
+            self.clan_name = f"{game.clan.name}Pack"
         self.last_screen = last_screen
         self.isMainMenu = isMainMenu
         self.mm_btn = mm_btn

@@ -41,6 +41,11 @@
             "Mild gore and blood will be allowed in the artwork displayed alongside patrols.",
             false
         ],
+        "denmother gender": [
+            "Allow denmothers to be any gender",
+            "When picking denmothers, they can be any gender rather than just female.",
+            false
+        ],
         "discord": [
             "Enable Discord integration",
             "Discord will show info about your Clan, including your Clan name",
