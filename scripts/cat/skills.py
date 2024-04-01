@@ -222,6 +222,7 @@ class Skill():
         SkillPath.PROPHET: "prophesying",
         SkillPath.GHOST: "ghosts",
         SkillPath.DARK: "dark forest",
+        SkillPath.TRACKER: "tracking",
         SkillPath.HEAVY: "heavy",
         SkillPath.AGILE: "agile"
     }
@@ -361,6 +362,7 @@ class CatSkills:
         SkillPath.PROPHET: SkillTypeFlag.SUPERNATURAL,
         SkillPath.GHOST: SkillTypeFlag.SUPERNATURAL,
         SkillPath.DARK: SkillTypeFlag.SUPERNATURAL,
+        SkillPath.TRACKER: SkillTypeFlag.SMART | SkillTypeFlag.OBSERVANT,
         SkillPath.HEAVY: SkillTypeFlag.STRONG,
         SkillPath.AGILE: SkillTypeFlag.AGILE
     }

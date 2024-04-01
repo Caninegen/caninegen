@@ -257,7 +257,8 @@ class Cat():
             in_weights = game.species["in_weights"]
 
             Cat.generate_species(self, species_list, weights, in_weights, self.par2species if self.par2species else None, [Cat.fetch_cat(i) for i in (self.parent1, self.parent2) if i])
-
+        else:
+            self.species = species
         # age and status
         if status is None and moons is None:
             self.age = choice(self.ages)
@@ -422,6 +423,7 @@ class Cat():
                 print(par_weights)
 
             self.species = choices(species_list, weights=par_weights, k=1)[0]
+
         else:
             self.species = choices(species_list, weights=weights, k=1)[0]
 

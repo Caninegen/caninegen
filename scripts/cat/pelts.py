@@ -373,14 +373,14 @@ class Pelt():
         # ------------------------------------------------------------------------------------------------------------#
 
         # Determine pelt.
-        weights = [0, 0, 0, 0]  #Weights for each pelt group. It goes: (tabbies, spotted, plain, exotic)
+        weights = [0]  #Weights for each pelt group. It goes: (tabbies, spotted, plain, exotic)
         for p_ in par_peltnames:
             if p_ in Pelt.plain:
-                add_weight = (5, 5, 50, 0)
+                add_weight = (5, 5)
             elif p_ is None:  # If there is at least one unknown parent, a None will be added to the set.
-                add_weight = (35, 20, 30, 15)
+                add_weight = (35)
             else:
-                add_weight = (0, 0, 0, 0)
+                add_weight = (0)
 
             for x in range(0, len(weights)):
                 weights[x] += add_weight[x]
